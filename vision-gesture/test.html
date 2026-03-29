@@ -1,0 +1,33 @@
+
+//gesture test for html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gesture Test</title>
+  <style>
+    body { background: #111; color: white; font-family: sans-serif; padding: 2rem; }
+    #status { font-size: 2rem; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h2>Gesture Test</h2>
+  <div id="status">Waiting for gesture...</div>
+
+  <!-- MediaPipe loaded from CDN, no install needed -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
+  <script type="module">
+    import { startCamera } from './camera.js'
+    import { onGestureDetected } from './recognition.js'
+
+    // Listen for gesture events and show them on screen
+    document.addEventListener('gesture-command', e => {
+      document.getElementById('status').textContent = 'Gesture: ' + e.detail.action
+    })
+
+    // Start camera, pass recognition as the frame handler
+    startCamera(onGestureDetected)
+  </script>
+</body>
+</html>
