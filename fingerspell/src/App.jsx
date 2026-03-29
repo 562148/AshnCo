@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
@@ -6,10 +6,21 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+        }
+      })
+  }, [])
 
   return (
     <>
       <section id="center">
+        <video ref={videoRef} autoPlay playInline />
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
           <img src={reactLogo} className="framework" alt="React logo" />
@@ -117,5 +128,6 @@ function App() {
     </>
   )
 }
+
 
 export default App
