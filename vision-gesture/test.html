@@ -19,7 +19,8 @@
 
   <script type="module">
     import { startCamera } from './camera.js'
-    import { onGestureDetected } from './recognition.js'
+    import { onGestureDetected,getCurrentGesture } from './recognition.js'
+
 
     // Listen for gesture events and show them on screen
     document.addEventListener('gesture-command', e => {
@@ -27,7 +28,11 @@
     })
 
     // Start camera, pass recognition as the frame handler
-    startCamera(onGestureDetected)
+    startCamera((results) =>{
+      onGestureDetected(results)
+      const current = getCurrentGesture(results)
+      document.getElementById('status').textContent = current
+    })
   </script>
 </body>
 </html>

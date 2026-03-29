@@ -25,6 +25,11 @@ export function onGestureDetected(results){
 
 }
 
+export function getCurrentGesture(results){
+    if(!results.multiHandLandmarks?.length) return null
+    return classify(results.multiHandLandmarks[0])
+}
+
 function fingerExtended(lm, tip, pip){
         return lm[tip].y < lm[pip].y //tip higher than screen than knuckle
     }
@@ -53,7 +58,7 @@ function fingerExtended(lm, tip, pip){
     }
 
     function isSix(lm) {
-        const thumbOut = lm[4].y < lm[3].y
+        const thumbOut = lm[4].y < lm[2].y
         const pinkyOut = fingerExtended(lm, 20, 18)
         const middleCurled = !fingerExtended(lm, 8, 6) && !fingerExtended(lm, 12, 10) && !fingerExtended(lm, 16, 14)
         return thumbOut && pinkyOut && middleCurled
