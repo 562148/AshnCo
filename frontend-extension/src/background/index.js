@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener((message, sender) => {
       break
 
     case 'GESTURE':
-      forwardToSidePanel({ type: 'GESTURE_UPDATE', action: message.action })
+      forwardToSidePanel({ type: 'GESTURE_UPDATE', action: message.action, context: currentContext })
       handleGesture(message.action, tabId)
       break
 
@@ -35,8 +35,8 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
 function handleGesture(action, tabId) {
   switch (action) {
-    case 'thumbsUp':
-      // Context-dependent: like when browsing, post when composing
+    case 'like':
+      // Context-dependent: like when browsing, post draft when composing
       if (currentContext === 'composing') {
         sendToContent(tabId, { type: 'POST_DRAFT' })
       } else {
@@ -44,17 +44,17 @@ function handleGesture(action, tabId) {
       }
       break
 
-    case 'peace':
+    case 'post':
       // Open compose and start voice input
       sendToContent(tabId, { type: 'OPEN_COMPOSE' })
       // TODO task 5: trigger STT, then send FILL_COMPOSE back to content script
       break
 
-    case 'shaka':
+    case 'next':
       sendToContent(tabId, { type: 'NEXT_POST' })
       break
 
-    case 'openPalm':
+    case 'readAloud':
       // Context-dependent: read post when browsing, read draft when composing
       sendToContent(tabId, { type: 'READ_ALOUD' })
       break
