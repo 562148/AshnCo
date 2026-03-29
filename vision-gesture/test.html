@@ -20,18 +20,24 @@
   <script type="module">
     import { startCamera } from './camera.js'
     import { onGestureDetected,getCurrentGesture } from './recognition.js'
+    import { updateFingerspell } from './fingerspell.js'
 
 
-    // Listen for gesture events and show them on screen
-    document.addEventListener('gesture-command', e => {
-      document.getElementById('status').textContent = 'Gesture: ' + e.detail.action
+    //listen for letters + gestures
+    document.addEventListener('gesture-command', e=> {
+      if (e.detail.action.startsWith('letter:')){
+        document.getElementById('status').textContent = 'Letter: ' + e.detail.action.split(":")[1]
+      }else {
+        document.getElementById('status').textContent = 'Fired: ' + e.detail.action
+      }
     })
 
     // Start camera, pass recognition as the frame handler
     startCamera((results) =>{
       onGestureDetected(results)
+      updateFingerspell(results)
       const current = getCurrentGesture(results)
-      document.getElementById('status').textContent = current
+      document.getElementById('status').textContent = current ? current : 'waiting for gesture...'
     })
   </script>
 </body>
